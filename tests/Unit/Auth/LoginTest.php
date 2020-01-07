@@ -4,15 +4,13 @@ namespace Tests\Unit\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
-    use DatabaseMigrations;
-
-    /** @var User */
-    protected $user;
+    use RefreshDatabase;
 
     /**
      * Тестирование аутентификации пользователя
@@ -26,10 +24,10 @@ class LoginTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-            'access_token',
-            'token_type',
-            'expires_in'
-        ]);
+                'access_token',
+                'token_type',
+                'expires_in'
+            ]);
     }
 
     /**
@@ -55,20 +53,9 @@ class LoginTest extends TestCase
     {
         parent::setUp();
         // Создание пользователя в БД
-        $this->user = factory(User::class)->make([
+        factory(User::class)->create([
             'email' => 'loginuser@mail.local',
             'password' => Hash::make('123456789'),
         ]);
-
-        $this->user->save();
-
-    }
-
-    protected function tearDown(): void
-    {
-        // удаление пользователя после прохождения теста
-        $this->user->delete();
-
-        parent::tearDown();
     }
 }
