@@ -62,7 +62,7 @@ class TagCRUDTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson([
-                'message' => __('food-catalog::tag.created'),
+                'message' => __('foodcatalog::tag.created'),
             ]);
     }
 
@@ -139,7 +139,7 @@ class TagCRUDTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('food-catalog::tag.updated'),
+                'message' => __('foodcatalog::tag.updated'),
             ]);
 
         $this->assertEquals('My Beauty Tag', $tag->name);
@@ -192,7 +192,7 @@ class TagCRUDTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('food-catalog::tag.deleted'),
+                'message' => __('foodcatalog::tag.deleted'),
             ]);
         $this->assertDeleted($tag);
     }

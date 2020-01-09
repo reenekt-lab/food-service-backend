@@ -68,7 +68,7 @@ class CategoryCRUDTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertJson([
-                'message' => __('food-catalog::category.created'),
+                'message' => __('foodcatalog::category.created'),
             ]);
     }
 
@@ -145,7 +145,7 @@ class CategoryCRUDTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('food-catalog::category.updated'),
+                'message' => __('foodcatalog::category.updated'),
             ]);
 
         $this->assertEquals('My Beauty Category with PHP-Sauce :D', $category->name);
@@ -199,7 +199,7 @@ class CategoryCRUDTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('food-catalog::category.deleted'),
+                'message' => __('foodcatalog::category.deleted'),
             ]);
         $this->assertDeleted($category);
     }

@@ -10,6 +10,7 @@ use Modules\FoodCatalog\Http\Requests\TagCreateRequest;
 use Modules\FoodCatalog\Http\Requests\TagUpdateRequest;
 use Modules\FoodCatalog\Transformers\Tag as TagResource;
 use Modules\FoodCatalog\Transformers\TagCollection;
+use Modules\Restaurants\Entities\Food;
 use Throwable;
 
 class TagController extends Controller
@@ -38,7 +39,7 @@ class TagController extends Controller
         $tag->fill($request->all());
         $tag->saveOrFail();
         return response()->json([
-            'message' => __('food-catalog::tag.created'),
+            'message' => __('foodcatalog::tag.created'),
         ], 201);
     }
 
@@ -64,7 +65,7 @@ class TagController extends Controller
     {
         $tag->update($request->all());
         return response()->json([
-            'message' => __('food-catalog::tag.updated'),
+            'message' => __('foodcatalog::tag.updated'),
         ]);
     }
 
@@ -79,7 +80,35 @@ class TagController extends Controller
     {
         $tag->delete();
         return response()->json([
-            'message' => __('food-catalog::tag.deleted'),
+            'message' => __('foodcatalog::tag.deleted'),
+        ]);
+    }
+
+    /**
+     * Attaches tag to given food
+     * @param Tag $tag
+     * @param Food $food
+     * @return JsonResponse
+     */
+    public function attach(Food $food, Tag $tag)
+    {
+        $food->tags()->attach($tag);
+        return response()->json([
+            'message' => __('foodcatalog::tag.attached'),
+        ]);
+    }
+
+    /**
+     * Detaches tag to given food
+     * @param Tag $tag
+     * @param Food $food
+     * @return JsonResponse
+     */
+    public function detach(Food $food, Tag $tag)
+    {
+        $food->tags()->detach($tag);
+        return response()->json([
+            'message' => __('foodcatalog::tag.detached'),
         ]);
     }
 }

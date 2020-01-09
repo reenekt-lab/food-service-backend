@@ -10,6 +10,7 @@ use Modules\FoodCatalog\Http\Requests\CategoryCreateRequest;
 use Modules\FoodCatalog\Http\Requests\CategoryUpdateRequest;
 use Modules\FoodCatalog\Transformers\Category as CategoryResource;
 use Modules\FoodCatalog\Transformers\CategoryCollection;
+use Modules\Restaurants\Entities\Food;
 use Throwable;
 
 class CategoryController extends Controller
@@ -38,7 +39,7 @@ class CategoryController extends Controller
         $category->fill($request->all());
         $category->saveOrFail();
         return response()->json([
-            'message' => __('food-catalog::category.created'),
+            'message' => __('foodcatalog::category.created'),
         ], 201);
     }
 
@@ -64,7 +65,7 @@ class CategoryController extends Controller
     {
         $category->update($request->all());
         return response()->json([
-            'message' => __('food-catalog::category.updated'),
+            'message' => __('foodcatalog::category.updated'),
         ]);
     }
 
@@ -79,7 +80,37 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response()->json([
-            'message' => __('food-catalog::category.deleted'),
+            'message' => __('foodcatalog::category.deleted'),
+        ]);
+    }
+
+    /**
+     * Attaches category to given food
+     * @param Category $category
+     * @param Food $food
+     * @return JsonResponse
+     */
+    public function attach(Food $food, Category $category)
+    {
+        $food->categories()->detach();
+        $food->categories()->attach($category);
+        return response()->json([
+            'message' => __('foodcatalog::category.attached'),
+        ]);
+    }
+
+    /**
+     * Detaches category to given food
+     * @param Category $category
+     * @param Food $food
+     * @return JsonResponse
+     */
+    public function detach(Food $food, Category $category)
+    {
+        $food->categories()->detach();
+        $food->categories()->detach($category);
+        return response()->json([
+            'message' => __('foodcatalog::category.detached'),
         ]);
     }
 }
