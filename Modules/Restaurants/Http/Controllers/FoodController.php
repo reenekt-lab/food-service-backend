@@ -38,7 +38,7 @@ class FoodController extends Controller
         $food->fill($request->all());
         $food->saveOrFail();
         return response()->json([
-            'message' => 'Food saved'
+            'message' => __('restaurants::food.created'),
         ], 201);
     }
 
@@ -64,7 +64,7 @@ class FoodController extends Controller
     {
         $food->update($request->all());
         return response()->json([
-            'message' => 'Food updated'
+            'message' => __('restaurants::food.updated'),
         ]);
     }
 
@@ -79,7 +79,7 @@ class FoodController extends Controller
     {
         $food->delete();
         return response()->json([
-            'message' => 'Food deleted'
+            'message' => __('restaurants::food.deleted'),
         ]);
     }
 }

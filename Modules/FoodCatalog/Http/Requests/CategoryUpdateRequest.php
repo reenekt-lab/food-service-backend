@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Restaurants\Http\Requests;
+namespace Modules\FoodCatalog\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FoodUpdateRequest extends FormRequest
+class CategoryUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,9 +15,8 @@ class FoodUpdateRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string'],
-            'description' => ['sometimes', 'nullable', 'string'],
-            'cost' => ['sometimes', 'required', 'numeric', 'min:0'],
-            'restaurant_id' => ['sometimes', 'required', 'exists:restaurants,id'],
+            'description' => ['sometimes', 'required', 'string'],
+            'parent_id' => ['sometimes', 'nullable', 'exists:categories,id'],
         ];
     }
 

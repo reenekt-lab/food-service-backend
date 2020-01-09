@@ -1,0 +1,13 @@
+{
+    "name": "FoodCatalog",
+    "alias": "foodcatalog",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\FoodCatalog\\Providers\\FoodCatalogServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

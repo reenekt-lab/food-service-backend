@@ -15,7 +15,7 @@ class FoodCreateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'cost' => ['required', 'numeric', 'min:0'],
             'restaurant_id' => ['required', 'exists:restaurants,id'],
         ];

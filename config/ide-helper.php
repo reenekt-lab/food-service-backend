@@ -94,6 +94,7 @@ return array(
     'model_locations' => array(
         'app/Models',
         'Modules/Restaurants/Entities',
+        'Modules/FoodCatalog/Entities',
     ),
 
 

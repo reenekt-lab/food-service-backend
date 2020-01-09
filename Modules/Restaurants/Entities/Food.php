@@ -2,7 +2,14 @@
 
 namespace Modules\Restaurants\Entities;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\FoodCatalog\Entities\Category;
+use Modules\FoodCatalog\Entities\Tag;
+use Nwidart\Modules\Facades\Module;
+
 
 /**
  * Modules\Restaurants\Entities\Food
@@ -14,6 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $restaurant_id ID ресторана
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Collection|Category[] $categories
+ * @property-read Category|null $category
+ * @property-read Collection|Tag[] $tags
+ * @property-read int|null $categories_count
  * @property-read \Modules\Restaurants\Entities\Restaurant $restaurant
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Food newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Food newQuery()
@@ -36,8 +47,60 @@ class Food extends Model
         'restaurant_id',
     ];
 
+    /**
+     * @return HasOne
+     */
     public function restaurant()
     {
         return $this->hasOne(Restaurant::class, 'id', 'restaurant_id');
+    }
+
+    /**
+     * @return Category|null
+     */
+    public function getCategoryAttribute()
+    {
+        if (Module::isEnabled('FoodCatalog')) {
+            return $this->categories->first();
+        }
+        return null;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategoriesAttribute()
+    {
+        if (Module::isEnabled('FoodCatalog')) {
+            return $this->categories()->get();
+        }
+        return [];
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'food_category', 'food_id', 'category_id');
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTagsAttribute()
+    {
+        if (Module::isEnabled('FoodCatalog')) {
+            return $this->tags()->get();
+        }
+        return [];
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'food_tags', 'food_id', 'tag_id');
     }
 }

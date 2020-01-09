@@ -1,16 +1,15 @@
 <?php
 
-namespace Modules\Restaurants\Tests\Feature;
+namespace Modules\FoodCatalog\Tests\Feature;
 
-use Modules\Restaurants\Entities\Food;
-use Modules\Restaurants\Entities\Restaurant;
-use Modules\Restaurants\Transformers\Food as FoodResource;
-use Modules\Restaurants\Transformers\FoodCollection;
+use Modules\FoodCatalog\Entities\Category;
+use Modules\FoodCatalog\Transformers\Category as CategoryResource;
+use Modules\FoodCatalog\Transformers\CategoryCollection;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class FoodCRUDTest extends TestCase
+class CategoryCRUDTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,11 +18,11 @@ class FoodCRUDTest extends TestCase
      */
     public function testIndex()
     {
-        factory(Food::class)->create();
+        factory(Category::class)->create();
 
-        $resource = new FoodCollection(Food::paginate());
+        $resource = new CategoryCollection(Category::paginate());
 
-        $response = $this->getJson('/api/food');
+        $response = $this->getJson('/api/categories');
 
         $response
             ->assertStatus(200)
@@ -53,24 +52,23 @@ class FoodCRUDTest extends TestCase
      */
     public function testStore()
     {
-        /** @var Restaurant $restaurant */
-        $restaurant = factory(Restaurant::class)->create([
+        /** @var Category $parent */
+        $parent = factory(Category::class)->create([
             'name' => 'My Beauty Restaurant',
         ]);
 
         $data = [
-            'name' => 'Test Food',
-            'description' => 'Example Food for tests',
-            'cost' => 250,
-            'restaurant_id' => $restaurant->id,
+            'name' => 'Test Category',
+            'description' => 'Example Category for tests',
+            'parent_id' => $parent->id,
         ];
 
-        $response = $this->postJson('/api/food', $data);
+        $response = $this->postJson('/api/categories', $data);
 
         $response
             ->assertStatus(201)
             ->assertJson([
-                'message' => __('restaurants::food.created'),
+                'message' => __('food-catalog::category.created'),
             ]);
     }
 
@@ -80,10 +78,10 @@ class FoodCRUDTest extends TestCase
     public function testStoreWrong()
     {
         $data = [
-            'description' => 'Example Food for tests',
+            'description' => 'Example Category for tests',
         ];
 
-        $response = $this->postJson('/api/food', $data);
+        $response = $this->postJson('/api/categories', $data);
 
         $response
             ->assertStatus(422)
@@ -91,8 +89,6 @@ class FoodCRUDTest extends TestCase
                 'message',
                 'errors' => [
                     'name',
-                    'cost',
-                    'restaurant_id',
                 ]
             ]);
     }
@@ -102,14 +98,14 @@ class FoodCRUDTest extends TestCase
      */
     public function testShow()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My Beauty Food',
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
+            'name' => 'My Beauty Category',
         ]);
 
-        $resource = new FoodResource($food);
+        $resource = new CategoryResource($category);
 
-        $response = $this->getJson("/api/food/{$food->id}");
+        $response = $this->getJson("/api/categories/{$category->id}");
 
         $response
             ->assertStatus(200)
@@ -121,7 +117,7 @@ class FoodCRUDTest extends TestCase
      */
     public function testShowNotFound()
     {
-        $response = $this->getJson("/api/food/1");
+        $response = $this->getJson("/api/categories/999");
 
         $response
             ->assertStatus(404);
@@ -132,28 +128,28 @@ class FoodCRUDTest extends TestCase
      */
     public function testUpdate()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My First Test Food',
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
+            'name' => 'My First Test Category',
         ]);
 
         $data = [
-            'name' => 'My Beauty Food with PHP-Sauce :D',
+            'name' => 'My Beauty Category with PHP-Sauce :D',
         ];
 
-        $response = $this->putJson("/api/food/{$food->id}", $data);
+        $response = $this->putJson("/api/categories/{$category->id}", $data);
 
         // Update restaurant's data
-        $food = Food::find($food->id);
+        $category = Category::find($category->id);
 
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('restaurants::food.updated'),
+                'message' => __('food-catalog::category.updated'),
             ]);
 
-        $this->assertEquals('My Beauty Food with PHP-Sauce :D', $food->name);
-        $this->assertNotEquals('My First Test Food', $food->name);
+        $this->assertEquals('My Beauty Category with PHP-Sauce :D', $category->name);
+        $this->assertNotEquals('My First Test Category', $category->name);
     }
 
     /**
@@ -161,9 +157,9 @@ class FoodCRUDTest extends TestCase
      */
     public function testUpdateWrong()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My First Test Food',
+        /** @var Category $category */
+        $category = factory(Category::class)->create([
+            'name' => 'My First Test Category',
         ]);
 
         $data = [
@@ -171,10 +167,10 @@ class FoodCRUDTest extends TestCase
             'description' => '',
         ];
 
-        $response = $this->putJson("/api/food/{$food->id}", $data);
+        $response = $this->putJson("/api/categories/{$category->id}", $data);
 
         // Update restaurant's data
-        $food = Food::find($food->id);
+        $category = Category::find($category->id);
 
         $response
             ->assertStatus(422)
@@ -185,8 +181,8 @@ class FoodCRUDTest extends TestCase
                 ]
             ]);
 
-        $this->assertNotEquals('', $food->name);
-        $this->assertEquals('My First Test Food', $food->name);
+        $this->assertNotEquals('', $category->name);
+        $this->assertEquals('My First Test Category', $category->name);
     }
 
     /**
@@ -194,18 +190,18 @@ class FoodCRUDTest extends TestCase
      */
     public function testDelete()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create();
+        /** @var Category $category */
+        $category = factory(Category::class)->create();
 
-        $response = $this->deleteJson("/api/food/{$food->id}");
+        $response = $this->deleteJson("/api/categories/{$category->id}");
 
         // Возможно в будущем будет заменено на http code 204
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('restaurants::food.deleted'),
+                'message' => __('food-catalog::category.deleted'),
             ]);
-        $this->assertDeleted($food);
+        $this->assertDeleted($category);
     }
 
     /**
@@ -214,9 +210,9 @@ class FoodCRUDTest extends TestCase
     public function testDeleteNotFound()
     {
         // Проверка отсутствия в БД записи
-        $this->assertDatabaseMissing('restaurants', ['id' => 1]);
+        $this->assertDatabaseMissing('restaurants', ['id' => 999]);
 
-        $response = $this->deleteJson("/api/food/1");
+        $response = $this->deleteJson("/api/categories/999");
 
         // Возможно в будущем будет заменено на http code 204
         $response

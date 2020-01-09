@@ -1,16 +1,15 @@
 <?php
 
-namespace Modules\Restaurants\Tests\Feature;
+namespace Modules\FoodCatalog\Tests\Feature;
 
-use Modules\Restaurants\Entities\Food;
-use Modules\Restaurants\Entities\Restaurant;
-use Modules\Restaurants\Transformers\Food as FoodResource;
-use Modules\Restaurants\Transformers\FoodCollection;
+use Modules\FoodCatalog\Entities\Tag;
+use Modules\FoodCatalog\Transformers\Tag as TagResource;
+use Modules\FoodCatalog\Transformers\TagCollection;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class FoodCRUDTest extends TestCase
+class TagCRUDTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,11 +18,11 @@ class FoodCRUDTest extends TestCase
      */
     public function testIndex()
     {
-        factory(Food::class)->create();
+        factory(Tag::class)->create();
 
-        $resource = new FoodCollection(Food::paginate());
+        $resource = new TagCollection(Tag::paginate());
 
-        $response = $this->getJson('/api/food');
+        $response = $this->getJson('/api/tags');
 
         $response
             ->assertStatus(200)
@@ -53,24 +52,17 @@ class FoodCRUDTest extends TestCase
      */
     public function testStore()
     {
-        /** @var Restaurant $restaurant */
-        $restaurant = factory(Restaurant::class)->create([
-            'name' => 'My Beauty Restaurant',
-        ]);
-
         $data = [
-            'name' => 'Test Food',
-            'description' => 'Example Food for tests',
-            'cost' => 250,
-            'restaurant_id' => $restaurant->id,
+            'name' => 'Test Tag',
+            'description' => 'Example Tag for tests',
         ];
 
-        $response = $this->postJson('/api/food', $data);
+        $response = $this->postJson('/api/tags', $data);
 
         $response
             ->assertStatus(201)
             ->assertJson([
-                'message' => __('restaurants::food.created'),
+                'message' => __('food-catalog::tag.created'),
             ]);
     }
 
@@ -80,10 +72,10 @@ class FoodCRUDTest extends TestCase
     public function testStoreWrong()
     {
         $data = [
-            'description' => 'Example Food for tests',
+            'description' => 'Example Tag for tests',
         ];
 
-        $response = $this->postJson('/api/food', $data);
+        $response = $this->postJson('/api/tags', $data);
 
         $response
             ->assertStatus(422)
@@ -91,8 +83,6 @@ class FoodCRUDTest extends TestCase
                 'message',
                 'errors' => [
                     'name',
-                    'cost',
-                    'restaurant_id',
                 ]
             ]);
     }
@@ -102,14 +92,14 @@ class FoodCRUDTest extends TestCase
      */
     public function testShow()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My Beauty Food',
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create([
+            'name' => 'My Beauty Tag',
         ]);
 
-        $resource = new FoodResource($food);
+        $resource = new TagResource($tag);
 
-        $response = $this->getJson("/api/food/{$food->id}");
+        $response = $this->getJson("/api/tags/{$tag->id}");
 
         $response
             ->assertStatus(200)
@@ -121,7 +111,7 @@ class FoodCRUDTest extends TestCase
      */
     public function testShowNotFound()
     {
-        $response = $this->getJson("/api/food/1");
+        $response = $this->getJson("/api/tags/1");
 
         $response
             ->assertStatus(404);
@@ -132,28 +122,28 @@ class FoodCRUDTest extends TestCase
      */
     public function testUpdate()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My First Test Food',
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create([
+            'name' => 'My First Test Tag',
         ]);
 
         $data = [
-            'name' => 'My Beauty Food with PHP-Sauce :D',
+            'name' => 'My Beauty Tag',
         ];
 
-        $response = $this->putJson("/api/food/{$food->id}", $data);
+        $response = $this->putJson("/api/tags/{$tag->id}", $data);
 
-        // Update restaurant's data
-        $food = Food::find($food->id);
+        // Update tag's data
+        $tag = Tag::find($tag->id);
 
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('restaurants::food.updated'),
+                'message' => __('food-catalog::tag.updated'),
             ]);
 
-        $this->assertEquals('My Beauty Food with PHP-Sauce :D', $food->name);
-        $this->assertNotEquals('My First Test Food', $food->name);
+        $this->assertEquals('My Beauty Tag', $tag->name);
+        $this->assertNotEquals('My First Test Tag', $tag->name);
     }
 
     /**
@@ -161,20 +151,19 @@ class FoodCRUDTest extends TestCase
      */
     public function testUpdateWrong()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create([
-            'name' => 'My First Test Food',
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create([
+            'name' => 'My First Test Tag',
         ]);
 
         $data = [
             'name' => '',
-            'description' => '',
         ];
 
-        $response = $this->putJson("/api/food/{$food->id}", $data);
+        $response = $this->putJson("/api/tags/{$tag->id}", $data);
 
-        // Update restaurant's data
-        $food = Food::find($food->id);
+        // Update tag's data
+        $tag = Tag::find($tag->id);
 
         $response
             ->assertStatus(422)
@@ -185,8 +174,8 @@ class FoodCRUDTest extends TestCase
                 ]
             ]);
 
-        $this->assertNotEquals('', $food->name);
-        $this->assertEquals('My First Test Food', $food->name);
+        $this->assertNotEquals('', $tag->name);
+        $this->assertEquals('My First Test Tag', $tag->name);
     }
 
     /**
@@ -194,18 +183,18 @@ class FoodCRUDTest extends TestCase
      */
     public function testDelete()
     {
-        /** @var Food $food */
-        $food = factory(Food::class)->create();
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create();
 
-        $response = $this->deleteJson("/api/food/{$food->id}");
+        $response = $this->deleteJson("/api/tags/{$tag->id}");
 
         // Возможно в будущем будет заменено на http code 204
         $response
             ->assertStatus(200)
             ->assertJson([
-                'message' => __('restaurants::food.deleted'),
+                'message' => __('food-catalog::tag.deleted'),
             ]);
-        $this->assertDeleted($food);
+        $this->assertDeleted($tag);
     }
 
     /**
@@ -214,9 +203,9 @@ class FoodCRUDTest extends TestCase
     public function testDeleteNotFound()
     {
         // Проверка отсутствия в БД записи
-        $this->assertDatabaseMissing('restaurants', ['id' => 1]);
+        $this->assertDatabaseMissing('tags', ['id' => 1]);
 
-        $response = $this->deleteJson("/api/food/1");
+        $response = $this->deleteJson("/api/tags/1");
 
         // Возможно в будущем будет заменено на http code 204
         $response

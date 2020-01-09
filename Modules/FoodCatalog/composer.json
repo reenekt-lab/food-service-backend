@@ -1,0 +1,26 @@
+{
+    "name": "reenekt/foodcatalog",
+    "description": "",
+    "type": "food-service-module",
+    "authors": [
+        {
+            "name": "Andrew Sementsov",
+            "email": "thesunlightday@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\FoodCatalog\\Providers\\FoodCatalogServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\FoodCatalog\\": ""
+        }
+    }
+}
