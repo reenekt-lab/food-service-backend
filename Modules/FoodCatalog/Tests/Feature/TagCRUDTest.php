@@ -111,7 +111,7 @@ class TagCRUDTest extends TestCase
      */
     public function testShowNotFound()
     {
-        $response = $this->getJson("/api/tags/1");
+        $response = $this->getJson("/api/tags/999");
 
         $response
             ->assertStatus(404);
@@ -203,9 +203,9 @@ class TagCRUDTest extends TestCase
     public function testDeleteNotFound()
     {
         // Проверка отсутствия в БД записи
-        $this->assertDatabaseMissing('tags', ['id' => 1]);
+        $this->assertDatabaseMissing('tags', ['id' => 999]);
 
-        $response = $this->deleteJson("/api/tags/1");
+        $response = $this->deleteJson("/api/tags/999");
 
         // Возможно в будущем будет заменено на http code 204
         $response

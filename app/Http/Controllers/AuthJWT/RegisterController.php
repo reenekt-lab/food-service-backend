@@ -4,6 +4,8 @@ namespace App\Http\Controllers\AuthJWT;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class RegisterController extends JWTBaseController
 {
+    /** @var Model|null $model Класс модели Eloquent, используемый для регистрации пользователя */
+    protected $modelClass = User::class;
+
+    /** @var string|null $guard Guard используемый для авторизации */
+    protected $guard = null;
+
     /**
      * Register new user
      *
@@ -25,21 +33,28 @@ class RegisterController extends JWTBaseController
         // Validates register request
         $this->getRegisterValidator($request->all())->validate();
 
-        $user = User::create([
-            'surname' => $request->input('surname'),
-            'first_name' => $request->input('first_name'),
-            'middle_name' => $request->input('middle_name'),
-            'phone_number' => $request->input('phone_number'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+        $user = $this->createUser($request);
 
         /** Send email to user. @see \Illuminate\Auth\Listeners\SendEmailVerificationNotification */
         event(new Registered($user));
 
-        $token = auth()->login($user);
+        $token = auth($this->guard)->login($user);
 
         return $this->respondWithToken($token);
+    }
+
+    /**
+     * Creates new user in application (database)
+     *
+     * @param Request $request
+     * @return Authenticatable
+     */
+    public function createUser(Request $request): Authenticatable
+    {
+        $attributes = $request->all();
+        $attributes['password'] = Hash::make($attributes['password']);
+
+        return $this->modelClass::create($attributes);
     }
 
     /**

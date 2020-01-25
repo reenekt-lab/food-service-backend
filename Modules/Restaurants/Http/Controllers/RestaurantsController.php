@@ -2,9 +2,9 @@
 
 namespace Modules\Restaurants\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controller;
 use Modules\Restaurants\Entities\Restaurant;
 use Modules\Restaurants\Http\Requests\RestaurantCreateRequest;
 use Modules\Restaurants\Http\Requests\RestaurantUpdateRequest;
@@ -14,6 +14,11 @@ use Throwable;
 
 class RestaurantsController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Restaurant::class);
+    }
+
     /**
      * Display a listing of the resource.
      *

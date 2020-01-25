@@ -1,4 +1,8 @@
 {
     "Restaurants": true,
-    "FoodCatalog": true
+    "FoodCatalog": true,
+    "Customers": true,
+    "BusinessClients": true,
+    "RestaurantManagers": true,
+    "Couriers": true
 }

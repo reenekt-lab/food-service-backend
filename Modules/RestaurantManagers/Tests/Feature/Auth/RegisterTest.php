@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\Auth;
+namespace Modules\RestaurantManagers\Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Modules\Restaurants\Entities\Restaurant;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
@@ -15,9 +15,12 @@ class RegisterTest extends TestCase
     /**
      * Тестирование регистрации пользователя
      */
-    public function testRegisterUser()
+    public function testRegisterRestaurantManager()
     {
-        $response = $this->postJson('api/auth/register', [
+        /** @var Restaurant $restaurant */
+        $restaurant = factory(Restaurant::class)->create();
+
+        $response = $this->postJson('api/restaurant-manager/auth/register', [
             'surname' => 'Surname',
             'first_name' => 'Firstname',
             'middle_name' => 'Middlename',
@@ -25,9 +28,11 @@ class RegisterTest extends TestCase
             'email' => 'registeruser@mail.local',
             'password' => '123456789',
             'password_confirmation' => '123456789',
+            'restaurant_id' => $restaurant->id,
         ]);
 
-        $response->assertStatus(200)
+        $response
+            ->assertStatus(200)
             ->assertJsonStructure([
             'access_token',
             'token_type',
@@ -38,9 +43,9 @@ class RegisterTest extends TestCase
     /**
      * Тестирование регистрации пользователя с неправильными данными
      */
-    public function testRegisterUserWithWrongData()
+    public function testRegisterRestaurantManagerWithWrongData()
     {
-        $response = $this->postJson('api/auth/register', [
+        $response = $this->postJson('api/restaurant-manager/auth/register', [
             'surname' => 'Surname',
             //'first_name' => 'Firstname',
             'middle_name' => 'Middlename',

@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\Auth;
+namespace Modules\Couriers\Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Modules\Couriers\Entities\Courier;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -15,14 +15,15 @@ class LoginTest extends TestCase
     /**
      * Тестирование аутентификации пользователя
      */
-    public function testLogUserIn()
+    public function testLogCourierIn()
     {
-        $response = $this->postJson('api/auth/login', [
+        $response = $this->postJson('api/courier/auth/login', [
             'email' => 'loginuser@mail.local',
             'password' => '123456789'
         ]);
 
-        $response->assertStatus(200)
+        $response
+            ->assertStatus(200)
             ->assertJsonStructure([
                 'access_token',
                 'token_type',
@@ -33,9 +34,9 @@ class LoginTest extends TestCase
     /**
      * Тестирование аутентификации пользователя с неправильными данными
      */
-    public function testNotLogWrongUserIn()
+    public function testNotLogWrongCourierIn()
     {
-        $response = $this->postJson('api/auth/login', [
+        $response = $this->postJson('api/courier/auth/login', [
             'email' => 'wronguser@mail.local',
             'password' => '0123456789'
         ]);
@@ -53,7 +54,7 @@ class LoginTest extends TestCase
     {
         parent::setUp();
         // Создание пользователя в БД
-        factory(User::class)->create([
+        factory(Courier::class)->create([
             'email' => 'loginuser@mail.local',
             'password' => Hash::make('123456789'),
         ]);

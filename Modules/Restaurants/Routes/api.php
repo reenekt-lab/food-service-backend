@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
+Route::get('restaurants/{restaurant}/food', 'FoodController@listByRestaurant')->name('restaurants.listByRestaurant');
+
 Route::apiResources([
     'restaurants' => 'RestaurantsController',
     'food' => 'FoodController',

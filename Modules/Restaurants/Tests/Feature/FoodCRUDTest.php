@@ -2,6 +2,7 @@
 
 namespace Modules\Restaurants\Tests\Feature;
 
+use App\Models\User;
 use Modules\Restaurants\Entities\Food;
 use Modules\Restaurants\Entities\Restaurant;
 use Modules\Restaurants\Transformers\Food as FoodResource;
@@ -24,6 +25,43 @@ class FoodCRUDTest extends TestCase
         $resource = new FoodCollection(Food::paginate());
 
         $response = $this->getJson('/api/food');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [],
+                'links' => [
+                    'first',
+                    'last',
+                    'prev',
+                    'next',
+                ],
+                'meta' => [
+                    'current_page',
+                    'from',
+                    'last_page',
+                    'path',
+                    'per_page',
+                    'to',
+                    'total',
+                ],
+            ])
+            ->assertJsonFragment($resource->jsonSerialize()[0]); // [0] fixes $resource array key error. Need to think about this problem
+    }
+
+    /**
+     * Получение всех записей в БД
+     */
+    public function testListByRestaurant()
+    {
+        factory(Food::class)->create();
+
+        /** @var Restaurant $restaurant */
+        $restaurant = factory(Restaurant::class)->create();
+
+        $resource = new FoodCollection(Food::paginate());
+
+        $response = $this->getJson("/api/restaurants/{$restaurant->id}/food");
 
         $response
             ->assertStatus(200)
@@ -143,7 +181,7 @@ class FoodCRUDTest extends TestCase
 
         $response = $this->putJson("/api/food/{$food->id}", $data);
 
-        // Update restaurant's data
+        // Update food's data
         $food = Food::find($food->id);
 
         $response
@@ -173,7 +211,7 @@ class FoodCRUDTest extends TestCase
 
         $response = $this->putJson("/api/food/{$food->id}", $data);
 
-        // Update restaurant's data
+        // Update food's data
         $food = Food::find($food->id);
 
         $response
@@ -221,5 +259,13 @@ class FoodCRUDTest extends TestCase
         // Возможно в будущем будет заменено на http code 204
         $response
             ->assertStatus(404);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $this->actingAs($user, 'api');
     }
 }

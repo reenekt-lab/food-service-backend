@@ -9,12 +9,18 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends JWTBaseController
 {
+    /** @var string $using_middleware Посредник, используемый в данном контроллере */
+    protected $using_middleware = 'auth:api';
+
+    /** @var string|null $guard Guard используемый для авторизации */
+    protected $guard = null;
+
     /**
      * LoginController constructor.
      */
     public function __construct()
     {
-        $this->middleware('auth:api')->except('login');
+        $this->middleware($this->using_middleware)->except('login');
     }
 
     /**
@@ -43,7 +49,7 @@ class LoginController extends JWTBaseController
         $credentials = $request->only([$this->username(), 'password']);
 
         // Authentication attempt
-        $token = auth()->attempt($credentials);
+        $token = auth($this->guard)->attempt($credentials);
 
         if ($token) {
             return $this->respondWithToken($token);
@@ -61,7 +67,7 @@ class LoginController extends JWTBaseController
      */
     public function logout()
     {
-        auth()->logout();
+        auth($this->guard)->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -73,7 +79,7 @@ class LoginController extends JWTBaseController
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth($this->guard)->refresh());
     }
 
     /**

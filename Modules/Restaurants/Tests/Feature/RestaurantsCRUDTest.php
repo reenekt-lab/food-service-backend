@@ -2,6 +2,7 @@
 
 namespace Modules\Restaurants\Tests\Feature;
 
+use App\Models\User;
 use Modules\Restaurants\Entities\Restaurant;
 use Modules\Restaurants\Transformers\Restaurant as RestaurantResource;
 use Modules\Restaurants\Transformers\RestaurantCollection;
@@ -205,12 +206,20 @@ class RestaurantsCRUDTest extends TestCase
     public function testDeleteNotFound()
     {
         // Проверка отсутствия в БД записи
-        $this->assertDatabaseMissing('restaurants', ['id' => 1]);
+        $this->assertDatabaseMissing('restaurants', ['id' => 999]);
 
-        $response = $this->deleteJson("/api/restaurants/1");
+        $response = $this->deleteJson("/api/restaurants/999");
 
         // Возможно в будущем будет заменено на http code 204
         $response
             ->assertStatus(404);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $this->actingAs($user, 'api');
     }
 }

@@ -1,0 +1,25 @@
+{
+    "name": "reenekt/customers",
+    "description": "",
+    "authors": [
+        {
+            "name": "Andrew Sementsov",
+            "email": "thesunlightday@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Customers\\Providers\\CustomersServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Customers\\": ""
+        }
+    }
+}

@@ -95,6 +95,9 @@ return array(
         'app/Models',
         'Modules/Restaurants/Entities',
         'Modules/FoodCatalog/Entities',
+        'Modules/Customers/Entities',
+        'Modules/Couriers/Entities',
+        'Modules/RestaurantManagers/Entities',
     ),
 
 

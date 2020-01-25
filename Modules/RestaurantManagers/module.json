@@ -1,0 +1,13 @@
+{
+    "name": "RestaurantManagers",
+    "alias": "restaurantmanagers",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\RestaurantManagers\\Providers\\RestaurantManagersServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -1,0 +1,25 @@
+{
+    "name": "reenekt/couriers",
+    "description": "",
+    "authors": [
+        {
+            "name": "Andrew Sementsov",
+            "email": "thesunlightday@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Couriers\\Providers\\CouriersServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Couriers\\": ""
+        }
+    }
+}

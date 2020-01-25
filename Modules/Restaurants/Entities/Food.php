@@ -37,6 +37,7 @@ use Nwidart\Modules\Facades\Module;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Food whereRestaurantId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Food whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read int|null $tags_count
  */
 class Food extends Model
 {

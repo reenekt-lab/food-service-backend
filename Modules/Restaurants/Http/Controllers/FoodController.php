@@ -2,9 +2,11 @@
 
 namespace Modules\Restaurants\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controller;
+use Modules\RestaurantManagers\Entities\RestaurantManager;
 use Modules\Restaurants\Entities\Food;
 use Modules\Restaurants\Http\Requests\FoodCreateRequest;
 use Modules\Restaurants\Http\Requests\FoodUpdateRequest;
@@ -14,6 +16,11 @@ use Throwable;
 
 class FoodController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Food::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +29,29 @@ class FoodController extends Controller
     public function index()
     {
         $resource = Food::paginate();
+        return new FoodCollection($resource);
+    }
+
+    /**
+     * Возвращает список блюд принадлежащих ресторану менеджера.
+     *
+     * @return FoodCollection
+     * @throws AuthorizationException
+     */
+    public function listByRestaurant()
+    {
+        $this->authorize('viewAny', Food::class);
+
+        if (auth('api')->check()) {
+            $resource = Food::paginate();
+        } elseif (auth('restaurant_manager')->check()) {
+            /** @var RestaurantManager $user */
+            $user = auth('restaurant_manager')->user();
+            $resource = Food::whereRestaurantId($user->restaurant_id)->paginate();
+        } else {
+            $resource = Food::paginate();
+        }
+
         return new FoodCollection($resource);
     }
 
