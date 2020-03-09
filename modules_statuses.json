@@ -4,5 +4,7 @@
     "Customers": true,
     "BusinessClients": true,
     "RestaurantManagers": true,
-    "Couriers": true
+    "Couriers": true,
+    "Payments": true,
+    "Orders": true
 }

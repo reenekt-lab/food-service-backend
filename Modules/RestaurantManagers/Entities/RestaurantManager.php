@@ -49,6 +49,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $restaurant_id ID ресторана менеджера
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\RestaurantManagers\Entities\RestaurantManager whereRestaurantId($value)
  * @property-read \Modules\Restaurants\Entities\Restaurant $restaurant
+ * @property int $is_admin Является ли менеджер владельцем (администратором) ресторана
+ * @method static \Illuminate\Database\Eloquent\Builder|\Modules\RestaurantManagers\Entities\RestaurantManager whereIsAdmin($value)
  */
 class RestaurantManager extends Authenticatable implements JWTSubject
 {

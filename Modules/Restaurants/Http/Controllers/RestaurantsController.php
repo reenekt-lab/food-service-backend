@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Modules\Restaurants\Entities\Restaurant;
+use Modules\Restaurants\Events\RestaurantCreated;
 use Modules\Restaurants\Http\Requests\RestaurantCreateRequest;
 use Modules\Restaurants\Http\Requests\RestaurantUpdateRequest;
 use Modules\Restaurants\Transformers\RestaurantCollection;
@@ -42,6 +43,9 @@ class RestaurantsController extends Controller
         $restaurant = new Restaurant;
         $restaurant->fill($request->all());
         $restaurant->saveOrFail();
+
+        event(new RestaurantCreated($restaurant));
+
         return response()->json([
             'message' => __('restaurants::restaurants.created'),
         ], 201);
