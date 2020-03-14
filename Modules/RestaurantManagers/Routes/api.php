@@ -20,4 +20,4 @@ Route::prefix('restaurant-manager/auth')->group(function () {
     Route::post('refresh', 'LoginController@refresh');
 });
 
-Route::resource('restaurant-manager', 'RestaurantManagersController');
+Route::apiResource('restaurant-manager', 'RestaurantManagersController');

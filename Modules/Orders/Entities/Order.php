@@ -3,6 +3,7 @@
 namespace Modules\Orders\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Couriers\Entities\Courier;
 use Modules\Customers\Entities\Customer;
 use Modules\Restaurants\Entities\Restaurant;
 
@@ -27,9 +28,20 @@ use Modules\Restaurants\Entities\Restaurant;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Orders\Entities\Order whereRestaurantId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Orders\Entities\Order whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $courier_id ID курьера, которы должен доставить заказ
+ * @property string $status Статус заказа
+ * @property-read \Modules\Couriers\Entities\Courier|null $courier
+ * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Orders\Entities\Order whereCourierId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Orders\Entities\Order whereStatus($value)
  */
 class Order extends Model
 {
+    public const STATUS_CREATED = 'created';
+    public const STATUS_PAID = 'paid';
+    public const STATUS_COOKING = 'cooking';
+    public const STATUS_DELIVERING = 'delivering';
+    public const STATUS_DELIVERED = 'delivered';
+
     protected $fillable = [
         'customer_id',
         'content',
@@ -48,5 +60,10 @@ class Order extends Model
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);
+    }
+
+    public function courier()
+    {
+        return $this->belongsTo(Courier::class);
     }
 }

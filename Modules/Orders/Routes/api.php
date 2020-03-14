@@ -13,6 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/orders', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('order', 'OrderController');

@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('payments')->group(function() {
-    Route::get('/', 'PaymentsController@index');
-});
+//Route::prefix('payments')->group(function() {
+//    Route::get('/', 'PaymentsController@index');
+//});

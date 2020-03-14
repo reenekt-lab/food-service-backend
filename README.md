@@ -11,7 +11,12 @@ TODO description
 Project WILL NOT WORKING without running `php artisan vendor:publish --tag=food-service-init` command
 
 # TODOs
+## General
 * use phpmoney implementation for laravel for working with money (and update db structure if necessary)
+
+## code TODOs
+* Modules/Orders/Http/Controllers/OrderController.php:16
+* add tests to order's module
 
 # Credits
 [Andrew Sementsov](https://github.com/reenekt) - author and maintainer
