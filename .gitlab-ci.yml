@@ -13,6 +13,7 @@ variables:
   MYSQL_DATABASE: food_service_db
   MYSQL_USER: homestead
   MYSQL_PASSWORD:  secret
+  DB_HOST: mysql
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
