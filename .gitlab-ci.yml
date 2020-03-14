@@ -1,8 +1,10 @@
-image: php:7.4.3
+stages:
+  - build
+  - test
+  # TODO deploy stage
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
+image: edbizarro/gitlab-ci-pipeline-php:7.4
+
 services:
   - mysql:5.7
 
@@ -11,11 +13,6 @@ variables:
   MYSQL_DATABASE: food_service_db
   MYSQL_USER: homestead
   MYSQL_PASSWORD:  secret
-
-stages:
-  - build
-  - test
-  # TODO deploy stage
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
@@ -26,33 +23,25 @@ cache:
   paths:
     - vendor/
 
-before_script:
-  # Update packages
-  - apt-get update -yqq
-  # Install dependencies
-  - apt-get install git libcurl4-gnutls-dev libicu-dev libmcrypt-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libpq-dev libsqlite3-dev libaspell-dev libsnmp-dev libpcre3-dev libtidy-dev libonig-dev libzip-dev -yqq
-  # Install php extensions
-  - docker-php-ext-install mbstring pdo_mysql curl json intl gd xml zip bz2 opcache
-  # Install & enable Xdebug for code coverage reports
-  - pecl install xdebug
-  - docker-php-ext-enable xdebug
-  # Install Composer and project dependencies.
-  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-build_project:
+build:
   stage: build
   only:
     - merge_requests
   script:
-    - composer install
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
     - cp .env.testing .env
     - php artisan key:generate
     - php artisan config:cache
-    - php artisan migrate
+    - php artisan migrate:fresh
+  artifacts:
+    paths:
+      - ./storage/logs # for debugging
+    expire_in: 7 days
+    when: always
 
-test_project:
+test:
   stage: test
   only:
     - merge_requests
   script:
-    - php vendor/bin/phpunit --coverage-text --colors=never
+    - vendor/bin/phpunit --coverage-text --colors=never
