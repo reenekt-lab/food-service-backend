@@ -22,6 +22,7 @@ class RestaurantManagerUpdateRequest extends FormRequest
             'phone_number' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('restaurant_managers')->ignore($this->restaurant_manager->id)],
             'password' => ['sometimes', 'required', 'string', 'min:8', 'confirmed'],
+            'is_admin' => ['sometimes', 'boolean'],
         ];
     }
 
@@ -59,6 +60,7 @@ class RestaurantManagerUpdateRequest extends FormRequest
                 'email.unique' => __('restaurantmanager::restaurant_manager_request_messages.email.unique'),
                 'password.confirmed' => __('restaurantmanager::restaurant_manager_request_messages.password.confirmed'),
 
+                'is_admin.boolean' => __('restaurantmanager::restaurant_manager_request_messages.is_admin.boolean'),
             ];
         }
 

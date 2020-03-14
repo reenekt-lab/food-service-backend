@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('restaurantmanagers')->group(function() {
-    Route::get('/', 'RestaurantManagersController@index');
-});
+//Route::prefix('restaurantmanagers')->group(function() {
+//    Route::get('/', 'RestaurantManagersController@index');
+//});

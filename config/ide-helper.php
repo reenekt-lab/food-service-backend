@@ -98,6 +98,8 @@ return array(
         'Modules/Customers/Entities',
         'Modules/Couriers/Entities',
         'Modules/RestaurantManagers/Entities',
+        'Modules/Orders/Entities',
+        'Modules/Payments/Entities',
     ),
 
 

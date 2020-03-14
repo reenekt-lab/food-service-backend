@@ -1,0 +1,25 @@
+{
+    "name": "reenekt/payments",
+    "description": "",
+    "authors": [
+        {
+            "name": "Andrew Sementsov",
+            "email": "thesunlightday@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Payments\\Providers\\PaymentsServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Payments\\": ""
+        }
+    }
+}

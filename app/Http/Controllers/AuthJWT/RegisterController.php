@@ -35,8 +35,9 @@ class RegisterController extends JWTBaseController
 
         $user = $this->createUser($request);
 
-        /** Send email to user. @see \Illuminate\Auth\Listeners\SendEmailVerificationNotification */
-        event(new Registered($user));
+//        /** Send email to user. @see \Illuminate\Auth\Listeners\SendEmailVerificationNotification */
+//        event(new Registered($user));
+        $this->dispatchUserCreatedEvent($user);
 
         $token = auth($this->guard)->login($user);
 
@@ -55,6 +56,17 @@ class RegisterController extends JWTBaseController
         $attributes['password'] = Hash::make($attributes['password']);
 
         return $this->modelClass::create($attributes);
+    }
+
+    /**
+     * Dispatch events after user created
+     *
+     * @param Authenticatable $user
+     */
+    public function dispatchUserCreatedEvent($user): void
+    {
+        /** Send email to user. @see \Illuminate\Auth\Listeners\SendEmailVerificationNotification */
+        event(new Registered($user));
     }
 
     /**

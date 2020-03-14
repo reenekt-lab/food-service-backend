@@ -5,6 +5,7 @@ namespace Modules\Customers\Entities;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Payments\Support\Account\Eloquent\HasAccount;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -45,10 +46,11 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Customers\Entities\Customer whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Modules\Customers\Entities\Customer withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\Modules\Customers\Entities\Customer withoutTrashed()
+ * @property-read \Modules\Payments\Entities\Account $account
  */
 class Customer extends Authenticatable implements JWTSubject
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes, HasAccount;
 
     /**
      * The attributes that are mass assignable.

@@ -1,0 +1,25 @@
+{
+    "name": "reenekt/orders",
+    "description": "",
+    "authors": [
+        {
+            "name": "Andrew Sementsov",
+            "email": "thesunlightday@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Orders\\Providers\\OrdersServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Orders\\": ""
+        }
+    }
+}

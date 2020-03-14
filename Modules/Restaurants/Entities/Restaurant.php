@@ -3,6 +3,7 @@
 namespace Modules\Restaurants\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Payments\Support\Account\Eloquent\HasAccount;
 
 /**
  * Modules\Restaurants\Entities\Restaurant
@@ -23,9 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Restaurant whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Restaurant whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Modules\Payments\Entities\Account $account
  */
 class Restaurant extends Model
 {
+    use HasAccount;
+
     protected $fillable = [
         'name',
         'description',

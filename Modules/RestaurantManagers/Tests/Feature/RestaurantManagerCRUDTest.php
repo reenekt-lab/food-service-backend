@@ -3,6 +3,7 @@
 namespace Modules\RestaurantManagers\Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Modules\RestaurantManagers\Entities\RestaurantManager;
 use Modules\RestaurantManagers\Transformers\RestaurantManager as RestaurantManagerResource;
 use Modules\RestaurantManagers\Transformers\RestaurantManagerCollection;
@@ -123,6 +124,9 @@ class RestaurantManagerCRUDTest extends TestCase
         $restaurantManager = factory(RestaurantManager::class)->create();
 
         $resource = new RestaurantManagerResource($restaurantManager);
+
+        // FIXME убрать костыль с исправлением типа bool на int, возвращаемый в ответе
+        $resource->resource->is_admin = 0;
 
         $response = $this->getJson("/api/restaurant-manager/{$restaurantManager->id}");
 

@@ -1,7 +1,7 @@
-#Food Service Backend
+# Food Service Backend
 TODO description
 
-#Important Info
+# Important Info
 ## custom `vendor:publish` tags
 `food-service` - common tag for this project
 
@@ -10,7 +10,15 @@ TODO description
 `food-service-init` - tag for initialization components necessary for working.
 Project WILL NOT WORKING without running `php artisan vendor:publish --tag=food-service-init` command
 
-#Credits
+# TODOs
+## General
+* use phpmoney implementation for laravel for working with money (and update db structure if necessary)
+
+## code TODOs
+* Modules/Orders/Http/Controllers/OrderController.php:16
+* add tests to order's module
+
+# Credits
 [Andrew Sementsov](https://github.com/reenekt) - author and maintainer
 
 Powered by [Laravel Framework](https://laravel.com)
