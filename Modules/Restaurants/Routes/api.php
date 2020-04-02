@@ -23,3 +23,8 @@ Route::apiResources([
     'restaurants' => 'RestaurantsController',
     'food' => 'FoodController',
 ]);
+
+Route::apiResource('common-category', 'CommonCategoryController')->only([
+    'index',
+    'show',
+]);

@@ -4,7 +4,7 @@ namespace Modules\Restaurants\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RestaurantCreateRequest extends FormRequest
+class CommonCategoryUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,11 +13,9 @@ class RestaurantCreateRequest extends FormRequest
      */
     public function rules()
     {
+        // TODO crud
         return [
-            'name' => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'address' => ['required', 'string'],
-            'categories' => ['sometimes', 'array'],
+            //
         ];
     }
 

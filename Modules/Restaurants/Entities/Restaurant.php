@@ -25,6 +25,8 @@ use Modules\Payments\Support\Account\Eloquent\HasAccount;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\Restaurant whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \Modules\Payments\Entities\Account $account
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\Restaurants\Entities\CommonCategory[] $common_categories
+ * @property-read int|null $common_categories_count
  */
 class Restaurant extends Model
 {
@@ -35,4 +37,14 @@ class Restaurant extends Model
         'description',
         'address',
     ];
+
+    public function common_categories()
+    {
+        return $this->belongsToMany(
+            CommonCategory::class,
+            'common_categories_restaurants_pivot',
+            'restaurant_id',
+            'common_category_id'
+        );
+    }
 }
