@@ -27,7 +27,7 @@ class RestaurantsController extends Controller
      */
     public function index()
     {
-        $resource = Restaurant::paginate();
+        $resource = Restaurant::with('common_categories')->paginate();
         return new RestaurantCollection($resource);
     }
 
@@ -44,6 +44,11 @@ class RestaurantsController extends Controller
         $restaurant->fill($request->all());
         $restaurant->saveOrFail();
 
+        $common_categories = $request->input('categories', []);
+        if (!empty($common_categories)) {
+            $restaurant->common_categories()->attach($common_categories);
+        }
+
         event(new RestaurantCreated($restaurant));
 
         return response()->json([
@@ -59,7 +64,7 @@ class RestaurantsController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        return new RestaurantResource($restaurant);
+        return new RestaurantResource($restaurant->load('common_categories'));
     }
 
     /**
@@ -72,6 +77,12 @@ class RestaurantsController extends Controller
     public function update(RestaurantUpdateRequest $request, Restaurant $restaurant)
     {
         $restaurant->update($request->all());
+
+        $common_categories = $request->input('categories', []);
+        if (!empty($common_categories)) {
+            $restaurant->common_categories()->sync($common_categories);
+        }
+
         return response()->json([
             'message' => __('restaurants::restaurants.updated'),
         ]);
@@ -86,6 +97,7 @@ class RestaurantsController extends Controller
      */
     public function destroy(Restaurant $restaurant)
     {
+        $restaurant->common_categories()->detach();
         $restaurant->delete();
 
         // Возможно в будущем будет заменено на http code 204

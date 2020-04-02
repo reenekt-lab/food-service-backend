@@ -17,6 +17,7 @@ class RestaurantUpdateRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string'],
             'description' => ['sometimes', 'nullable', 'string'],
             'address' => ['sometimes', 'required', 'string'],
+            'categories' => ['sometimes', 'array'],
         ];
     }
 
