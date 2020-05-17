@@ -20,7 +20,7 @@ class LoginController extends JWTBaseController
      */
     public function __construct()
     {
-        $this->middleware($this->using_middleware)->except('login');
+        $this->middleware($this->using_middleware)->except(['login', 'me']);
     }
 
     /**
@@ -104,5 +104,13 @@ class LoginController extends JWTBaseController
         ];
 
         return Validator::make($data, $rules, $messages);
+    }
+
+    public function me()
+    {
+        $user = auth($this->guard)->user();
+        return response()->json([
+            'user' => $user
+        ]);
     }
 }

@@ -28,7 +28,7 @@ class RestaurantPolicy
             return null; // go to next checks
         }
 
-        return false; // deny
+        return null;
     }
 
     /**
@@ -37,21 +37,21 @@ class RestaurantPolicy
      * @param User|RestaurantManager $user
      * @return mixed
      */
-    public function viewAny($user)
+    public function viewAny($user = null)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can view the models user.
      *
-     * @param User|RestaurantManager $user
+     * @param User|RestaurantManager|null $user
      * @param  Restaurant $restaurant
      * @return mixed
      */
-    public function view($user, Restaurant $restaurant)
+    public function view($user = null, Restaurant $restaurant)
     {
-        return $user->restaurant_id == $restaurant->id;
+        return true;
     }
 
     /**
@@ -74,7 +74,7 @@ class RestaurantPolicy
      */
     public function update($user, Restaurant $restaurant)
     {
-        return true;
+        return $user->restaurant_id == $restaurant->id;
     }
 
     /**

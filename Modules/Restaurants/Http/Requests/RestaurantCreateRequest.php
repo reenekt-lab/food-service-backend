@@ -14,7 +14,7 @@ class RestaurantCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'min:2'],
             'description' => ['nullable', 'string'],
             'address' => ['required', 'string'],
             'categories' => ['sometimes', 'array'],

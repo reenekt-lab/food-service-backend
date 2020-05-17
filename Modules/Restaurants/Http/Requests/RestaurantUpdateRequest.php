@@ -14,7 +14,7 @@ class RestaurantUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['sometimes', 'required', 'string'],
+            'name' => ['sometimes', 'required', 'string', 'min:2'],
             'description' => ['sometimes', 'nullable', 'string'],
             'address' => ['sometimes', 'required', 'string'],
             'categories' => ['sometimes', 'array'],
