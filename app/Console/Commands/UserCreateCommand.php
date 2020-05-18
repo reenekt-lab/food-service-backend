@@ -61,8 +61,10 @@ class UserCreateCommand extends Command
 
         if ($user) {
             $this->info("Created user with id = {$user->id}");
+            return 0;
         } else {
             $this->error('USER WAS NOT CREATED!');
+            return 1;
         }
     }
 }

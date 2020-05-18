@@ -2,9 +2,9 @@
 
 namespace Modules\FoodCatalog\Transformers;
 
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource ;
 
-class Tag extends Resource
+class Tag extends JsonResource
 {
     /**
      * Transform the resource into an array.

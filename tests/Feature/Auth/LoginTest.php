@@ -22,7 +22,8 @@ class LoginTest extends TestCase
             'password' => '123456789'
         ]);
 
-        $response->assertStatus(200)
+        $response->dump()
+            ->assertStatus(200)
             ->assertJsonStructure([
                 'access_token',
                 'token_type',

@@ -41,6 +41,8 @@ use Nwidart\Modules\Facades\Module;
  */
 class Food extends Model
 {
+    protected $table = 'foods';
+
     protected $fillable = [
         'name',
         'description',

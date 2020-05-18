@@ -2,9 +2,9 @@
 
 namespace Modules\Couriers\Transformers;
 
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource ;
 
-class Courier extends Resource
+class Courier extends JsonResource
 {
     /**
      * Transform the resource into an array.

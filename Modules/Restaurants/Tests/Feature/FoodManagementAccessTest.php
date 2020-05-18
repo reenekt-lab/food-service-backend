@@ -71,13 +71,17 @@ class FoodManagementAccessTest extends TestCase
         foreach ($this->accessMap as $userType => $accessChecks) {
             // auth
             $user = factory($userType)->create();
-            $this->actingAs($user, $this->guardMap[$userType]);
+//            $this->actingAs($user, $this->guardMap[$userType]);
+
+            print_r($this->guardMap[$userType]);
+            echo PHP_EOL;
 
             // TODO вынести в TestCase (или куда-нибудь еще)
             // todo в переопределение функции \Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication::be
             // todo или \Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication::actingAs
-            $token = auth($this->guardMap[$userType])->tokenById($user->id);
-            auth($this->guardMap[$userType])->setToken($token);
+//            $token = auth($this->guardMap[$userType])->tokenById($user->id);
+//            auth($this->guardMap[$userType])->setToken($token);
+            $token = auth($this->guardMap[$userType])->login($user);
 
             // run check callbacks
             foreach ($accessChecks as $accessCheck => $checkValue) {
