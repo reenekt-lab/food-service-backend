@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Modules\Restaurants\Entities\Restaurant;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,7 +51,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $is_admin Является ли менеджер владельцем (администратором) ресторана
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\RestaurantManagers\Entities\RestaurantManager whereIsAdmin($value)
  */
-class RestaurantManager extends Authenticatable implements JWTSubject
+class RestaurantManager extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
@@ -97,25 +96,5 @@ class RestaurantManager extends Authenticatable implements JWTSubject
     public function getJWTIdentifier()
     {
         return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-    /**
-     * Restaurant relationship
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function restaurant()
-    {
-        return $this->belongsTo(Restaurant::class);
     }
 }
