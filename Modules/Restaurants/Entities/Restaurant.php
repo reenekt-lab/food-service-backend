@@ -4,6 +4,8 @@ namespace Modules\Restaurants\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Payments\Support\Account\Eloquent\HasAccount;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Modules\Restaurants\Entities\Restaurant
@@ -28,9 +30,9 @@ use Modules\Payments\Support\Account\Eloquent\HasAccount;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\Restaurants\Entities\CommonCategory[] $common_categories
  * @property-read int|null $common_categories_count
  */
-class Restaurant extends Model
+class Restaurant extends Model implements HasMedia
 {
-    use HasAccount;
+    use InteractsWithMedia, HasAccount;
 
     protected $fillable = [
         'name',
@@ -46,5 +48,12 @@ class Restaurant extends Model
             'restaurant_id',
             'common_category_id'
         );
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('main_image')
+            ->singleFile();
     }
 }

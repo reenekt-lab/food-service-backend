@@ -20,7 +20,7 @@ return [
      */
     'guards' => [
         'restaurant_manager' => [
-            'driver' => 'jwt',
+            'driver' => 'passport',
             'provider' => 'restaurant_managers',
         ],
     ],

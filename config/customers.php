@@ -20,7 +20,7 @@ return [
      */
     'guards' => [
         'customer' => [
-            'driver' => 'jwt',
+            'driver' => 'passport',
             'provider' => 'customers',
         ],
     ],

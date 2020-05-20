@@ -17,6 +17,7 @@ class RestaurantsController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth:api')->except('index', 'show');
         $this->authorizeResource(Restaurant::class);
     }
 
@@ -43,6 +44,10 @@ class RestaurantsController extends Controller
         $restaurant = new Restaurant;
         $restaurant->fill($request->all());
         $restaurant->saveOrFail();
+
+        if ($request->hasFile('main_image')) {
+            $restaurant->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
 
         $common_categories = $request->input('categories', []);
         if (!empty($common_categories)) {
@@ -77,6 +82,10 @@ class RestaurantsController extends Controller
     public function update(RestaurantUpdateRequest $request, Restaurant $restaurant)
     {
         $restaurant->update($request->all());
+
+        if ($request->hasFile('main_image')) {
+            $restaurant->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
 
         $common_categories = $request->input('categories', []);
         if (!empty($common_categories)) {

@@ -18,9 +18,5 @@ use Illuminate\Http\Request;
 //});
 
 Route::prefix('auth')->group(function () {
-    Route::post('register', 'AuthJWT\RegisterController@register');
-    Route::post('login', 'AuthJWT\LoginController@login');
-    Route::post('logout', 'AuthJWT\LoginController@logout');
-    Route::post('refresh', 'AuthJWT\LoginController@refresh');
-    Route::get('me', 'AuthJWT\LoginController@me');
+    Route::get('user', 'PassportAuth\UserController')->middleware('auth:api');
 });

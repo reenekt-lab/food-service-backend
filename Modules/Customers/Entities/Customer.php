@@ -5,6 +5,7 @@ namespace Modules\Customers\Entities;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 use Modules\Payments\Support\Account\Eloquent\HasAccount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -49,7 +50,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class Customer extends Authenticatable
 {
-    use Notifiable, SoftDeletes, HasAccount;
+    use HasApiTokens, Notifiable, SoftDeletes, HasAccount;
 
     /**
      * The attributes that are mass assignable.
