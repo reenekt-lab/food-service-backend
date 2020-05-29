@@ -6,4 +6,5 @@ return [
     'deleted' => 'Tag deleted',
     'attached' => 'Tag attached',
     'detached' => 'Tag detached',
+    'synced' => 'Tag synced',
 ];

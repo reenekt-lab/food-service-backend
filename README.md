@@ -18,6 +18,7 @@ Project WILL NOT WORKING without running `php artisan vendor:publish --tag=food-
 * Modules/Orders/Http/Controllers/OrderController.php:16
 * add tests to order's module
 * add attaching/detaching common categories to restaurants (and add tests)
+* check all form requests (there're no restaurant_id validation in restaurant managers and couriers modules)
 
 # Credits
 [Andrew Sementsov](https://github.com/reenekt) - author and maintainer

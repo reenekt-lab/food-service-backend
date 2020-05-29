@@ -16,7 +16,8 @@ class CouriersController extends Controller
 {
     public function __construct()
     {
-        auth()->shouldUse('api');
+        auth()->shouldUse('api'); // strange, but works. FIXME
+        $this->middleware('auth:api,restaurant_manager')->except('index', 'show');
         $this->authorizeResource(Courier::class);
     }
 
@@ -27,7 +28,7 @@ class CouriersController extends Controller
      */
     public function index()
     {
-        $resource = Courier::paginate();
+        $resource = Courier::with('restaurant')->paginate();
         return new CourierCollection($resource);
     }
 
@@ -56,7 +57,7 @@ class CouriersController extends Controller
      */
     public function show(Courier $courier)
     {
-        return new CourierResource($courier);
+        return new CourierResource($courier->load('restaurant'));
     }
 
     /**

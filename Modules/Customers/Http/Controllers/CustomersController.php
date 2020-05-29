@@ -16,7 +16,8 @@ class CustomersController extends Controller
 {
     public function __construct()
     {
-        auth()->shouldUse('api');
+        auth()->shouldUse('api'); // strange, but works. FIXME
+        $this->middleware('auth:api')->except('index', 'show');
         $this->authorizeResource(Customer::class);
     }
 

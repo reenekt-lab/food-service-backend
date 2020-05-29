@@ -4,7 +4,9 @@ namespace Modules\FoodCatalog\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controller;
+//use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Request;
 use Modules\FoodCatalog\Entities\Category;
 use Modules\FoodCatalog\Http\Requests\CategoryCreateRequest;
 use Modules\FoodCatalog\Http\Requests\CategoryUpdateRequest;
@@ -15,6 +17,12 @@ use Throwable;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api,restaurant_manager')->except('index', 'show');
+//        $this->authorizeResource(Category::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +30,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $resource = Category::paginate();
+        $resource = Category::with('parent')->paginate();
         return new CategoryCollection($resource);
     }
 
@@ -51,7 +59,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return new CategoryResource($category);
+        return new CategoryResource($category->load('parent'));
     }
 
     /**
@@ -111,6 +119,21 @@ class CategoryController extends Controller
         $food->categories()->detach($category);
         return response()->json([
             'message' => __('foodcatalog::category.detached'),
+        ]);
+    }
+
+    /**
+     * Sync categories to given food
+     * @param Food $food
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sync(Food $food, Request $request)
+    {
+        $categories = $request->input('categories');
+        $food->categories()->sync($categories);
+        return response()->json([
+            'message' => __('foodcatalog::category.synced'),
         ]);
     }
 }

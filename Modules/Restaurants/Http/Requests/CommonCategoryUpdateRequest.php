@@ -15,7 +15,7 @@ class CommonCategoryUpdateRequest extends FormRequest
     {
         // TODO crud
         return [
-            //
+            'name' => 'required|string'
         ];
     }
 

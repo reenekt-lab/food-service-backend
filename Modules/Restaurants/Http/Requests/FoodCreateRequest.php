@@ -18,6 +18,8 @@ class FoodCreateRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'cost' => ['required', 'numeric', 'min:0'],
             'restaurant_id' => ['required', 'exists:restaurants,id'],
+            'categories' => ['sometimes', 'array'],
+            'tags' => ['sometimes', 'array'],
         ];
     }
 

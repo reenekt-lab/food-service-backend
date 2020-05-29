@@ -3,6 +3,7 @@
 namespace Modules\Restaurants\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource ;
+use Illuminate\Support\Arr;
 
 class CommonCategory extends JsonResource
 {
@@ -14,6 +15,8 @@ class CommonCategory extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $result = parent::toArray($request);
+        $result = Arr::add($result, 'main_image', $this->getFirstMediaUrl('main_image'));
+        return $result;
     }
 }

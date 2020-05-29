@@ -18,6 +18,8 @@ class FoodUpdateRequest extends FormRequest
             'description' => ['sometimes', 'nullable', 'string'],
             'cost' => ['sometimes', 'required', 'numeric', 'min:0'],
             'restaurant_id' => ['sometimes', 'required', 'exists:restaurants,id'],
+            'categories' => ['sometimes', 'array'],
+            'tags' => ['sometimes', 'array'],
         ];
     }
 

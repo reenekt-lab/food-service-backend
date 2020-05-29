@@ -18,6 +18,7 @@ class CommonCategoryController extends Controller
     {
         // TODO
 //        $this->authorizeResource(CommonCategory::class);
+        $this->middleware('auth:api')->except('index', 'show');
     }
 
     /**
@@ -41,10 +42,14 @@ class CommonCategoryController extends Controller
     public function store(CommonCategoryCreateRequest $request)
     {
         // TODO crud
-        throw new Exception('NOT IMPLEMENTED');
+//        throw new Exception('NOT IMPLEMENTED');
         $common_category = new CommonCategory;
         $common_category->fill($request->all());
         $common_category->saveOrFail();
+
+        if ($request->hasFile('main_image')) {
+            $common_category->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
 
         return response()->json([
             'message' => __('restaurants::common_category.created'),
@@ -72,8 +77,13 @@ class CommonCategoryController extends Controller
     public function update(CommonCategoryUpdateRequest $request, CommonCategory $common_category)
     {
         // TODO crud
-        throw new Exception('NOT IMPLEMENTED');
+//        throw new Exception('NOT IMPLEMENTED');
         $common_category->update($request->all());
+
+        if ($request->hasFile('main_image')) {
+            $common_category->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
+
         return response()->json([
             'message' => __('restaurants::common_category.updated'),
         ]);
@@ -89,7 +99,7 @@ class CommonCategoryController extends Controller
     public function destroy(CommonCategory $common_category)
     {
         // TODO crud
-        throw new Exception('NOT IMPLEMENTED');
+//        throw new Exception('NOT IMPLEMENTED');
         $common_category->delete();
 
         // Возможно в будущем будет заменено на http code 204

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\FoodCatalog\Entities\Category;
 use Modules\FoodCatalog\Entities\Tag;
 use Nwidart\Modules\Facades\Module;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 
 /**
@@ -39,8 +41,10 @@ use Nwidart\Modules\Facades\Module;
  * @mixin \Eloquent
  * @property-read int|null $tags_count
  */
-class Food extends Model
+class Food extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'foods';
 
     protected $fillable = [
@@ -105,5 +109,12 @@ class Food extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'food_tags', 'food_id', 'tag_id');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('main_image')
+            ->singleFile();
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Passport\HasApiTokens;
+use Modules\Restaurants\Entities\Restaurant;
 
 /**
  * Modules\Couriers\Entities\Courier
@@ -44,6 +45,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Couriers\Entities\Courier whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Modules\Couriers\Entities\Courier withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\Modules\Couriers\Entities\Courier withoutTrashed()
+ * @property-read \Modules\Restaurants\Entities\Restaurant $restaurant
  * @mixin \Eloquent
  */
 class Courier extends Authenticatable
@@ -62,6 +64,7 @@ class Courier extends Authenticatable
         'phone_number',
         'email',
         'password',
+        'restaurant_id',
     ];
 
     /**
@@ -81,4 +84,9 @@ class Courier extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 }

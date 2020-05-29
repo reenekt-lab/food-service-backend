@@ -89,13 +89,8 @@ class RestaurantManager extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
+    public function restaurant()
     {
-        return $this->getKey();
+        return $this->belongsTo(Restaurant::class);
     }
 }

@@ -3,6 +3,8 @@
 namespace Modules\Restaurants\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Modules\Restaurants\Entities\CommonCategory
@@ -24,11 +26,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Restaurants\Entities\CommonCategory whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class CommonCategory extends Model
+class CommonCategory extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
         'name',
-        'image_url',
     ];
 
     public function restaurants()
@@ -39,5 +42,12 @@ class CommonCategory extends Model
             'common_category_id',
             'restaurant_id'
         );
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('main_image')
+            ->singleFile();
     }
 }

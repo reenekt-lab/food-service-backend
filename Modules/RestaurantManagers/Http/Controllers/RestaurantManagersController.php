@@ -5,6 +5,7 @@ namespace Modules\RestaurantManagers\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Modules\RestaurantManagers\Entities\RestaurantManager;
 use Modules\RestaurantManagers\Http\Requests\RestaurantManagerCreateRequest;
 use Modules\RestaurantManagers\Http\Requests\RestaurantManagerUpdateRequest;
@@ -16,7 +17,8 @@ class RestaurantManagersController extends Controller
 {
     public function __construct()
     {
-        auth()->shouldUse('api');
+        auth()->shouldUse('api'); // strange, but works. FIXME
+        $this->middleware('auth:api')->except('index', 'show');
         $this->authorizeResource(RestaurantManager::class);
     }
 
@@ -27,7 +29,7 @@ class RestaurantManagersController extends Controller
      */
     public function index()
     {
-        $resource = RestaurantManager::paginate();
+        $resource = RestaurantManager::with('restaurant')->paginate();
         return new RestaurantManagerCollection($resource);
     }
 
@@ -41,7 +43,9 @@ class RestaurantManagersController extends Controller
     public function store(RestaurantManagerCreateRequest $request)
     {
         $restaurant_manager = new RestaurantManager;
-        $restaurant_manager->fill($request->all());
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
+        $restaurant_manager->fill($data);
         $restaurant_manager->saveOrFail();
         return response()->json([
             'message' => __('restaurantmanagers::restaurant_manager.created'),
@@ -68,7 +72,9 @@ class RestaurantManagersController extends Controller
      */
     public function update(RestaurantManagerUpdateRequest $request, RestaurantManager $restaurant_manager)
     {
-        $restaurant_manager->update($request->all());
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
+        $restaurant_manager->update($data);
         return response()->json([
             'message' => __('restaurantmanagers::restaurant_manager.updated'),
         ]);

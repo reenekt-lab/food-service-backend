@@ -5,6 +5,7 @@ namespace Modules\FoodCatalog\Http\Controllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Request;
 use Modules\FoodCatalog\Entities\Tag;
 use Modules\FoodCatalog\Http\Requests\TagCreateRequest;
 use Modules\FoodCatalog\Http\Requests\TagUpdateRequest;
@@ -15,6 +16,12 @@ use Throwable;
 
 class TagController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api,restaurant_manager')->except('index', 'show');
+//        $this->authorizeResource(Tag::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -109,6 +116,21 @@ class TagController extends Controller
         $food->tags()->detach($tag);
         return response()->json([
             'message' => __('foodcatalog::tag.detached'),
+        ]);
+    }
+
+    /**
+     * Sync categories to given food
+     * @param Food $food
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sync(Food $food, Request $request)
+    {
+        $tags = $request->input('tags');
+        $food->tags()->sync($tags);
+        return response()->json([
+            'message' => __('foodcatalog::tag.synced'),
         ]);
     }
 }

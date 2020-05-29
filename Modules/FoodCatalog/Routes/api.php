@@ -15,8 +15,10 @@ use Illuminate\Http\Request;
 
 Route::post('food/{food}/categories/attach/{category}', 'CategoryController@attach')->name('food.categories.attach');
 Route::post('food/{food}/categories/detach/{category}', 'CategoryController@detach')->name('food.categories.detach');
+Route::post('food/{food}/categories/sync', 'CategoryController@sync')->name('food.categories.sync');
 Route::post('food/{food}/tags/attach/{tag}', 'TagController@attach')->name('food.tags.attach');
 Route::post('food/{food}/tags/detach/{tag}', 'TagController@detach')->name('food.tags.detach');
+Route::post('food/{food}/tags/sync', 'TagController@sync')->name('food.tags.sync');
 
 Route::apiResources([
     'categories' => 'CategoryController',

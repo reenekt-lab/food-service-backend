@@ -34,32 +34,32 @@ class RestaurantManagerCreateRequest extends FormRequest
     {
         if (App::isLocale('ru')) {
             return [
-                'surname.required' => __('restaurantmanager::restaurant_manager_request_messages.surname.required'),
-                'first_name.required' => __('restaurantmanager::restaurant_manager_request_messages.first_name.required'),
-                'middle_name.required' => __('restaurantmanager::restaurant_manager_request_messages.middle_name.required'),
-                'phone_number.required' => __('restaurantmanager::restaurant_manager_request_messages.phone_number.required'),
-                'email.required' => __('restaurantmanager::restaurant_manager_request_messages.email.required'),
-                'password.required' => __('restaurantmanager::restaurant_manager_request_messages.password.required'),
+                'surname.required' => __('restaurantmanagers::restaurant_manager_request_messages.surname.required'),
+                'first_name.required' => __('restaurantmanagers::restaurant_manager_request_messages.first_name.required'),
+                'middle_name.required' => __('restaurantmanagers::restaurant_manager_request_messages.middle_name.required'),
+                'phone_number.required' => __('restaurantmanagers::restaurant_manager_request_messages.phone_number.required'),
+                'email.required' => __('restaurantmanagers::restaurant_manager_request_messages.email.required'),
+                'password.required' => __('restaurantmanagers::restaurant_manager_request_messages.password.required'),
 
-                'surname.string' => __('restaurantmanager::restaurant_manager_request_messages.surname.string'),
-                'first_name.string' => __('restaurantmanager::restaurant_manager_request_messages.first_name.string'),
-                'middle_name.string' => __('restaurantmanager::restaurant_manager_request_messages.middle_name.string'),
-                'phone_number.string' => __('restaurantmanager::restaurant_manager_request_messages.phone_number.string'),
-                'email.string' => __('restaurantmanager::restaurant_manager_request_messages.email.string'),
-                'password.string' => __('restaurantmanager::restaurant_manager_request_messages.password.string'),
+                'surname.string' => __('restaurantmanagers::restaurant_manager_request_messages.surname.string'),
+                'first_name.string' => __('restaurantmanagers::restaurant_manager_request_messages.first_name.string'),
+                'middle_name.string' => __('restaurantmanagers::restaurant_manager_request_messages.middle_name.string'),
+                'phone_number.string' => __('restaurantmanagers::restaurant_manager_request_messages.phone_number.string'),
+                'email.string' => __('restaurantmanagers::restaurant_manager_request_messages.email.string'),
+                'password.string' => __('restaurantmanagers::restaurant_manager_request_messages.password.string'),
 
-                'surname.max' => __('restaurantmanager::restaurant_manager_request_messages.surname.max'),
-                'first_name.max' => __('restaurantmanager::restaurant_manager_request_messages.first_name.max'),
-                'middle_name.max' => __('restaurantmanager::restaurant_manager_request_messages.middle_name.max'),
-                'phone_number.max' => __('restaurantmanager::restaurant_manager_request_messages.phone_number.max'),
-                'email.max' => __('restaurantmanager::restaurant_manager_request_messages.email.max'),
-                'password.min' => __('restaurantmanager::restaurant_manager_request_messages.password.min'),
+                'surname.max' => __('restaurantmanagers::restaurant_manager_request_messages.surname.max'),
+                'first_name.max' => __('restaurantmanagers::restaurant_manager_request_messages.first_name.max'),
+                'middle_name.max' => __('restaurantmanagers::restaurant_manager_request_messages.middle_name.max'),
+                'phone_number.max' => __('restaurantmanagers::restaurant_manager_request_messages.phone_number.max'),
+                'email.max' => __('restaurantmanagers::restaurant_manager_request_messages.email.max'),
+                'password.min' => __('restaurantmanagers::restaurant_manager_request_messages.password.min'),
 
-                'email.email' => __('restaurantmanager::restaurant_manager_request_messages.email.email'),
-                'email.unique' => __('restaurantmanager::restaurant_manager_request_messages.email.unique'),
-                'password.confirmed' => __('restaurantmanager::restaurant_manager_request_messages.password.confirmed'),
+                'email.email' => __('restaurantmanagers::restaurant_manager_request_messages.email.email'),
+                'email.unique' => __('restaurantmanagers::restaurant_manager_request_messages.email.unique'),
+                'password.confirmed' => __('restaurantmanagers::restaurant_manager_request_messages.password.confirmed'),
 
-                'is_admin.boolean' => __('restaurantmanager::restaurant_manager_request_messages.is_admin.boolean'),
+                'is_admin.boolean' => __('restaurantmanagers::restaurant_manager_request_messages.is_admin.boolean'),
             ];
         }
 

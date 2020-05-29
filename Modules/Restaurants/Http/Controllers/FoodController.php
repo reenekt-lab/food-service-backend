@@ -12,13 +12,14 @@ use Modules\Restaurants\Http\Requests\FoodCreateRequest;
 use Modules\Restaurants\Http\Requests\FoodUpdateRequest;
 use Modules\Restaurants\Transformers\FoodCollection;
 use Modules\Restaurants\Transformers\Food as FoodResource;
+use Nwidart\Modules\Facades\Module;
 use Throwable;
 
 class FoodController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->except('index', 'show');
+        $this->middleware('auth:api,restaurant_manager')->except('index', 'show', 'listByRestaurant');
         $this->authorizeResource(Food::class);
     }
 
@@ -29,7 +30,7 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $resource = Food::paginate();
+        $resource = Food::with(['restaurant', 'categories', 'tags'])->paginate();
         return new FoodCollection($resource);
     }
 
@@ -68,6 +69,18 @@ class FoodController extends Controller
         $food = new Food;
         $food->fill($request->all());
         $food->saveOrFail();
+
+        if (Module::isEnabled('FoodCatalog') && $request->has('categories')) {
+            $food->categories()->sync($request->input('categories'));
+        }
+        if (Module::isEnabled('FoodCatalog') && $request->has('tags')) {
+            $food->tags()->sync($request->input('tags'));
+        }
+
+        if ($request->hasFile('main_image')) {
+            $food->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
+
         return response()->json([
             'message' => __('restaurants::food.created'),
         ], 201);
@@ -81,7 +94,7 @@ class FoodController extends Controller
      */
     public function show(Food $food)
     {
-        return new FoodResource($food);
+        return new FoodResource($food->load(['restaurant', 'categories', 'tags']));
     }
 
     /**
@@ -94,6 +107,18 @@ class FoodController extends Controller
     public function update(FoodUpdateRequest $request, Food $food)
     {
         $food->update($request->all());
+
+        if (Module::isEnabled('FoodCatalog') && $request->has('categories')) {
+            $food->categories()->sync($request->input('categories'));
+        }
+        if (Module::isEnabled('FoodCatalog') && $request->has('tags')) {
+            $food->tags()->sync($request->input('tags'));
+        }
+
+        if ($request->hasFile('main_image')) {
+            $food->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+        }
+
         return response()->json([
             'message' => __('restaurants::food.updated'),
         ]);

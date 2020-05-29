@@ -24,7 +24,8 @@ Route::apiResources([
     'food' => 'FoodController',
 ]);
 
-Route::apiResource('common-category', 'CommonCategoryController')->only([
-    'index',
-    'show',
-]);
+Route::apiResource('common-category', 'CommonCategoryController');
+//    ->only([
+//        'index',
+//        'show',
+//    ]);

@@ -17,7 +17,7 @@ class RestaurantsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->except('index', 'show');
+        $this->middleware('auth:api,restaurant_manager')->except('index', 'show');
         $this->authorizeResource(Restaurant::class);
     }
 

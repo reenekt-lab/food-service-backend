@@ -6,4 +6,5 @@ return [
     'deleted' => 'Category deleted',
     'attached' => 'Category attached',
     'detached' => 'Category detached',
+    'synced' => 'Category synced',
 ];
