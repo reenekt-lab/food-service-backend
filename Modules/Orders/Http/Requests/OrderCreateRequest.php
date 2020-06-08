@@ -4,6 +4,8 @@ namespace Modules\Orders\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\Rule;
+use Modules\Orders\Entities\Order;
 
 class OrderCreateRequest extends FormRequest
 {
@@ -15,10 +17,19 @@ class OrderCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'content' => ['required' /*, 'array'*/ ],
+            'content' => ['required', 'array'],
             'restaurant_id' => ['required', 'exists:restaurants,id'],
             'customer_id' => ['required', 'exists:customers,id'],
-            'courier_id' => ['sometimes', 'exists:couriers,id'],
+            'courier_id' => ['sometimes', 'nullable', 'exists:couriers,id'],
+            'status' => [
+                'sometimes', Rule::in([
+                    Order::STATUS_CREATED,
+                    Order::STATUS_PAID,
+                    Order::STATUS_COOKING,
+                    Order::STATUS_DELIVERING,
+                    Order::STATUS_DELIVERED,
+                ])
+            ],
         ];
     }
 
@@ -40,6 +51,8 @@ class OrderCreateRequest extends FormRequest
                 'restaurant_id.exists' => __('orders::order_request_messages.restaurant_id.exists'),
                 'customer_id.exists' => __('orders::order_request_messages.customer_id.exists'),
                 'courier_id.exists' => __('orders::order_request_messages.courier_id.exists'),
+
+                'status.in' => __('orders::order_request_messages.status.in'),
             ];
         }
 

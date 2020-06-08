@@ -14,6 +14,7 @@ use Modules\Restaurants\Entities\Restaurant;
  * @property int $customer_id ID покупателя
  * @property array $content Содержимое заказа (id товаров и их количество)
  * @property int $restaurant_id ID ресторана, у которого сделан заказ
+ * @property string $address Адрес доставки заказа
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\Customers\Entities\Customer $customer
@@ -39,6 +40,7 @@ class Order extends Model
     public const STATUS_CREATED = 'created';
     public const STATUS_PAID = 'paid';
     public const STATUS_COOKING = 'cooking';
+    public const STATUS_COOKED = 'cooked';
     public const STATUS_DELIVERING = 'delivering';
     public const STATUS_DELIVERED = 'delivered';
 
@@ -46,6 +48,9 @@ class Order extends Model
         'customer_id',
         'content',
         'restaurant_id',
+        'address',
+        'courier_id',
+        'status',
     ];
 
     protected $casts = [

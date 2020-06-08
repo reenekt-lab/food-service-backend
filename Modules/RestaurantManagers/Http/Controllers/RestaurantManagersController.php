@@ -19,7 +19,7 @@ class RestaurantManagersController extends Controller
     {
         auth()->shouldUse('api'); // strange, but works. FIXME
         $this->middleware('auth:api')->except('index', 'show');
-        $this->authorizeResource(RestaurantManager::class);
+//        $this->authorizeResource(RestaurantManager::class); // todo later
     }
 
     /**
@@ -60,7 +60,7 @@ class RestaurantManagersController extends Controller
      */
     public function show(RestaurantManager $restaurant_manager)
     {
-        return new RestaurantManagerResource($restaurant_manager);
+        return new RestaurantManagerResource($restaurant_manager->load('restaurant'));
     }
 
     /**
@@ -73,7 +73,9 @@ class RestaurantManagersController extends Controller
     public function update(RestaurantManagerUpdateRequest $request, RestaurantManager $restaurant_manager)
     {
         $data = $request->all();
-        $data['password'] = Hash::make($data['password']);
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
         $restaurant_manager->update($data);
         return response()->json([
             'message' => __('restaurantmanagers::restaurant_manager.updated'),

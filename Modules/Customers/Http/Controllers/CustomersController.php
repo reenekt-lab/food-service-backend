@@ -5,6 +5,7 @@ namespace Modules\Customers\Http\Controllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Modules\Customers\Entities\Customer;
 use Modules\Customers\Http\Requests\CustomerCreateRequest;
 use Modules\Customers\Http\Requests\CustomerUpdateRequest;
@@ -18,7 +19,7 @@ class CustomersController extends Controller
     {
         auth()->shouldUse('api'); // strange, but works. FIXME
         $this->middleware('auth:api')->except('index', 'show');
-        $this->authorizeResource(Customer::class);
+//        $this->authorizeResource(Customer::class); // todo later
     }
 
     /**
@@ -42,6 +43,8 @@ class CustomersController extends Controller
     public function store(CustomerCreateRequest $request)
     {
         $customer = new Customer;
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
         $customer->fill($request->all());
         $customer->saveOrFail();
         return response()->json([
@@ -69,7 +72,11 @@ class CustomersController extends Controller
      */
     public function update(CustomerUpdateRequest $request, Customer $customer)
     {
-        $customer->update($request->all());
+        $data = $request->all();
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+        $customer->update($data);
         return response()->json([
             'message' => __('customers::customers.updated'),
         ]);

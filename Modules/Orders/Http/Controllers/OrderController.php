@@ -18,7 +18,8 @@ class OrderController extends Controller
     public function __construct()
     {
         // TODO secure policy later
-//        auth()->shouldUse('api');
+        auth()->shouldUse('api'); // strange, but works. FIXME
+        $this->middleware('auth:api,restaurant_manager,courier,customer');
 //        $this->authorizeResource(Order::class);
     }
 
@@ -26,9 +27,28 @@ class OrderController extends Controller
      * Display a listing of the resource.
      * @return OrderCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resource = Order::paginate();
+        $resource_query = Order::with([
+            'customer',
+            'restaurant',
+            'courier',
+        ]);
+
+        $status = $request->input('status');
+        if ($status) {
+            $resource_query->where('status', $status);
+        }
+        $restaurant_id = $request->query('restaurant');
+        if ($restaurant_id !== null) {
+            $resource_query->where('restaurant_id', $restaurant_id);
+        }
+        $courier_id = $request->query('courier');
+        if ($courier_id !== null) {
+            $resource_query->where('courier_id', $courier_id);
+        }
+
+        $resource = $resource_query->paginate();
         return new OrderCollection($resource);
     }
 
@@ -55,7 +75,11 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return new OrderResource($order);
+        return new OrderResource($order->load([
+            'customer',
+            'restaurant',
+            'courier',
+        ]));
     }
 
     /**

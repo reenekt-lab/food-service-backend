@@ -73,6 +73,8 @@ class CourierUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth('api')->check();
+        return auth('api')->check()
+            || auth('restaurant_manager')->check()
+            || auth('courier')->check();
     }
 }

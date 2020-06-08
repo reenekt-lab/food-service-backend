@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Modules\RestaurantManagers\Entities\RestaurantManager;
 use Modules\Restaurants\Entities\Food;
 use Modules\Restaurants\Http\Requests\FoodCreateRequest;
@@ -26,11 +27,17 @@ class FoodController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return FoodCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resource = Food::with(['restaurant', 'categories', 'tags'])->paginate();
+        $restaurant_id = $request->query('restaurant');
+        $resource_query = Food::with(['restaurant', 'categories', 'tags']);
+        if ($restaurant_id !== null) {
+            $resource_query->where('restaurant_id', $restaurant_id);
+        }
+        $resource = $resource_query->paginate();
         return new FoodCollection($resource);
     }
 

@@ -18,5 +18,6 @@ use Illuminate\Http\Request;
 //});
 
 Route::prefix('auth')->group(function () {
-    Route::get('user', 'PassportAuth\UserController')->middleware('auth:api');
+    Route::get('user', 'PassportAuth\UserController')
+        ->middleware('auth:api,restaurant_manager,courier,customer');
 });
