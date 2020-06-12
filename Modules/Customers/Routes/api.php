@@ -13,11 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('customer/auth')->group(function () {
-    Route::post('register', 'RegisterController@register');
-    Route::post('login', 'LoginController@login');
-    Route::post('logout', 'LoginController@logout');
-    Route::post('refresh', 'LoginController@refresh');
-});
+//Route::prefix('customer/auth')->group(function () {
+//    Route::post('register', 'RegisterController@register');
+//    Route::post('login', 'LoginController@login');
+//    Route::post('logout', 'LoginController@logout');
+//    Route::post('refresh', 'LoginController@refresh');
+//});
+
+Route::post('customer/register', 'RegisterCustomerController');
 
 Route::resource('customer', 'CustomersController');

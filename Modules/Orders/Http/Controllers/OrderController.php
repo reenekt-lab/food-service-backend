@@ -36,8 +36,11 @@ class OrderController extends Controller
         ]);
 
         $status = $request->input('status');
-        if ($status) {
+        if ($status && !is_array($status)) {
             $resource_query->where('status', $status);
+        }
+        if ($status && is_array($status)) {
+            $resource_query->whereIn('status', $status);
         }
         $restaurant_id = $request->query('restaurant');
         if ($restaurant_id !== null) {
@@ -47,6 +50,12 @@ class OrderController extends Controller
         if ($courier_id !== null) {
             $resource_query->where('courier_id', $courier_id);
         }
+        $customer_id = $request->query('customer');
+        if ($customer_id !== null) {
+            $resource_query->where('customer_id', $customer_id);
+        }
+
+        $resource_query->orderByDesc('created_at');
 
         $resource = $resource_query->paginate();
         return new OrderCollection($resource);
@@ -65,6 +74,7 @@ class OrderController extends Controller
         $order->saveOrFail();
         return response()->json([
             'message' => __('orders::order.created'),
+            'order' => $order->toArray(),
         ], 201);
     }
 

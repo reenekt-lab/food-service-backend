@@ -4,7 +4,9 @@ namespace Modules\Restaurants\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Modules\Restaurants\Entities\Restaurant;
 use Modules\Restaurants\Events\RestaurantCreated;
 use Modules\Restaurants\Http\Requests\RestaurantCreateRequest;
@@ -24,11 +26,19 @@ class RestaurantsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return RestaurantCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resource = Restaurant::with('common_categories')->paginate();
+        $resource_query = Restaurant::with('common_categories');
+        $common_category_id = $request->query('common_category');
+        if ($common_category_id !== null) {
+            $resource_query->whereHas('common_categories', function (Builder $query) use ($common_category_id) {
+                $query->where('id', $common_category_id);
+            });
+        }
+        $resource = $resource_query->paginate();
         return new RestaurantCollection($resource);
     }
 

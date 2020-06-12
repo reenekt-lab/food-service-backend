@@ -73,6 +73,7 @@ class CustomerUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth('api')->check();
+        return auth('api')->check()
+            || auth('customer')->check();
     }
 }

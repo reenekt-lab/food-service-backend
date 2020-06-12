@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\FoodCatalog\Entities\Category;
 use Modules\RestaurantManagers\Entities\RestaurantManager;
 use Modules\Restaurants\Entities\Food;
 use Modules\Restaurants\Http\Requests\FoodCreateRequest;
@@ -36,6 +37,22 @@ class FoodController extends Controller
         $resource_query = Food::with(['restaurant', 'categories', 'tags']);
         if ($restaurant_id !== null) {
             $resource_query->where('restaurant_id', $restaurant_id);
+
+            if ($request->boolean('group_by_category')) {
+                $resource = $resource_query->get();
+                $resource->each(function ($item, $key) {
+                    $item['main_image'] = $item->getFirstMediaUrl('main_image');
+                });
+                $groupedResource = $resource->groupBy('categories.*.id');
+                $groupCategories = Category::whereIn('id', $groupedResource->keys())->get(['id', 'name']);
+
+                return response()->json([
+                    'data' => [
+                        'groupedFood' => $groupedResource,
+                        'categories' => $groupCategories
+                    ]
+                ]);
+            }
         }
         $resource = $resource_query->paginate();
         return new FoodCollection($resource);
@@ -46,6 +63,7 @@ class FoodController extends Controller
      *
      * @return FoodCollection
      * @throws AuthorizationException
+     * @deprecated Нужно проверить используется ли метод и удалить, если не нужен
      */
     public function listByRestaurant()
     {
